@@ -3,6 +3,10 @@
 // instanciando los objetos app y BrowserWindow
 import { app, BrowserWindow, ipcMain, dialog } from 'electron'
 import devtools from './devtools'
+import isImage from 'is-image'
+import filesize from 'filesize'
+import fs from 'fs'
+import path from 'path'
 
 if (process.env.NODE_ENV === 'development') {
   devtools()
@@ -55,6 +59,24 @@ ipcMain.on('open-directory', (event) => {
     properties: ['openDirectory']
   },
   (dir) => {
-    console.log(dir)
+    const images = []
+    if (dir) {
+      fs.readdir(dir[0], (err, files) => {
+        for (let i = 0; i < files.length; i++) {
+          if (isImage(files[i])) {
+            let imageFile = path.join(dir[0], files[i])
+            let stats = fs.statSync(imageFile)
+            let size = filesize(stats.size, {round: 0})
+            images.push({
+              filename: files[i],
+              src: `file://${imageFile}`,
+              size: size
+            })
+          }
+        }
+
+        console.log(images)
+      })
+    }
   })
 })
