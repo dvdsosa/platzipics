@@ -26,7 +26,7 @@ app.on('ready', () => {
   win = new BrowserWindow({
     width: 800,
     height: 600,
-    title: 'Hola Mundo!',
+    title: 'Platzipics',
     center: true,
     maximizable: false,
     show: false
@@ -94,5 +94,13 @@ ipcMain.on('open-save-dialog', (event, ext) => {
       event.sender.send('save-image', file)
     }
     console.log(file)
+  })
+})
+
+ipcMain.on('show-dialog', (event, info) => {
+  dialog.showMessageBox(win, {
+    type: info.type,
+    title: info.title,
+    message: info.message
   })
 })
