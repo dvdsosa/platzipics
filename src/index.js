@@ -3,6 +3,7 @@
 // instanciando los objetos app y BrowserWindow
 import { app, BrowserWindow, ipcMain, dialog } from 'electron'
 import devtools from './devtools'
+import handleErrors from './handle-errors'
 import isImage from 'is-image'
 import filesize from 'filesize'
 import fs from 'fs'
@@ -31,6 +32,8 @@ app.on('ready', () => {
     maximizable: false,
     show: false
   })
+
+  handleErrors(win)
 
   win.once('ready-to-show', () => {
     win.show()
