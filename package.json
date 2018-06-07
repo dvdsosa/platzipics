@@ -1,0 +1,23 @@
+{
+  "name": "platzipics",
+  "version": "1.0.0",
+  "description": "Aplicativo de electron para visualización de imágenes",
+  "main": "index.js",
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development electron src/index.js",
+    "lint": "standard",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "dvdsosa@gmail.com",
+  "license": "MIT",
+  "dependencies": {
+    "cross-env": "^5.1.6",
+    "electron-compile": "^6.4.2",
+    "electron-debug": "^2.0.0"
+  },
+  "devDependencies": {
+    "devtron": "^1.4.0",
+    "electron-prebuilt-compile": "^2.0.2",
+    "standard": "^11.0.1"
+  }
+}
