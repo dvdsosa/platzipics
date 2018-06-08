@@ -1,7 +1,7 @@
 'use strict'
 
 // instanciando los objetos app y BrowserWindow
-import { app, BrowserWindow, Tray } from 'electron'
+import { app, BrowserWindow, Tray, globalShortcut } from 'electron'
 import devtools from './devtools'
 import setIpcMain from './ipcMainEvents'
 import handleErrors from './handle-errors'
@@ -19,6 +19,7 @@ global.tray // eslint-disable-line
 // imprimiendo un mensaje en la consola antes de salir
 app.on('before-quit', () => {
   console.log('Saliendo...')
+  globalShortcut.unregisterAll()
 })
 
 // Ejecutando órdenes cuando la aplicación está lista
@@ -33,6 +34,10 @@ app.on('ready', () => {
     show: false
   })
 
+  globalShortcut.register('CommandOrControl+Alt+p', () => {
+    global.win.show()
+    global.win.focus()
+  })
   setIpcMain(global.win)
   handleErrors(global.win)
 
