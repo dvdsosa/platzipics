@@ -1,16 +1,19 @@
 'use strict'
 
 // instanciando los objetos app y BrowserWindow
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, Tray } from 'electron'
 import devtools from './devtools'
 import setIpcMain from './ipcMainEvents'
 import handleErrors from './handle-errors'
+import os from 'os'
+import path from 'path'
 
 if (process.env.NODE_ENV === 'development') {
   devtools()
 }
 
-global.win  //eslint-disable-line
+global.win  // eslint-disable-line
+global.tray // eslint-disable-line
 // console.dir(app)
 
 // imprimiendo un mensaje en la consola antes de salir
@@ -46,6 +49,19 @@ app.on('ready', () => {
     // para que no quede en memoria el objeto que visualiza la ventana
     global.win = null
     app.quit()
+  })
+
+  let icon
+  if(os.platform() === 'win32') {
+    icon = path.join(__dirname, 'assets','icons','tray-icon.ico')
+  } else {
+    icon = path.join(__dirname, 'assets', 'icons', 'tray-icon.png')
+  }
+
+  global.tray = new Tray(icon)
+  global.tray.setToolTip('Platzipics')
+  global.tray.on('click', () => {
+    global.win.isVisible() ? global.win.hide() : global.win.show()
   })
 
   // global.win.loadURL('http://devdocs.io/')
