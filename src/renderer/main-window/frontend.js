@@ -1,10 +1,12 @@
 import { setIpc, openDirectory, saveFile, openPreferences, uploadImage, pasteImage } from './main-window/ipcRendererEvents'
 import { addImageEvents, searchImagesEvent, selectEvent, print } from './main-window/images-ui'
+import createMenu from './main-window/menu'
 
 // import os from 'os'
 window.addEventListener('load', () => {
   // document.getElementById('mensaje').innerHTML = 'Este es un mensaje insertado por JS'
   // console.log(os.cpus())
+  createMenu()
   setIpc()
   addImageEvents()
   searchImagesEvent()
