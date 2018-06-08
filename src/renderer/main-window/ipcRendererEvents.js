@@ -1,4 +1,4 @@
-import { ipcRenderer, remote } from 'electron'
+import { ipcRenderer, clipboard, remote } from 'electron'
 import settings from 'electron-settings'
 import { clearImages, loadImages, addImageEvents, selectFirstImage } from './images-ui'
 import { saveImage } from './filters'
@@ -66,8 +66,15 @@ function showDialog (type, title, msg) {
 
 function saveFile () {
   const image = document.getElementById('image-displayed').dataset.original
-  const ext = path.extname(image)
 
+  let ext
+  if (image.indexOf('data:image/png;base64') !== -1)  {
+    ext=".png"
+  } else {
+    // Obtener la extensión del archivo para
+    // filtrar el cuadro de diálogo
+    ext = path.extname(image)
+  }
   ipcRenderer.send('open-save-dialog', ext)
 }
 
@@ -96,7 +103,8 @@ function uploadImage () {
         if (err) {
           showDialog('error', 'Platzipics', `Error al cargar archivo al FTP ${err}`)
         } else {
-          showDialog('info', 'Platzipics', `Imagen cargada con éxito`)          
+          clipboard.writeText(`ftp://192.168.1.135//${fileName}`)
+          showDialog('info', 'Platzipics', `Imagen cargada con éxito, el enlace se copió al portapapeles`)          
         }
         client.end()
       })
@@ -116,10 +124,25 @@ function uploadImage () {
   }
 }
 
+function pasteImage(){
+  const image = clipboard.readImage()
+
+  const data = image.toDataURL()
+  // todo el portapapeles devuelve las imágenes en formato PNG
+  if (data.indexOf('data:image/png;base64') !== -1 && !image.isEmpty()) {
+    let mainImage = document.getElementById('image-displayed')
+    mainImage.src = data
+    mainImage.dataset.original = data
+  } else {
+    showDialog('error', 'Platzipics', 'No hay una imagen válida en el portapapeles')
+  }
+}
+
 module.exports = {
   setIpc: setIpc,
   openDirectory: openDirectory,
   saveFile,
   openPreferences,
-  uploadImage
+  uploadImage,
+  pasteImage
 }
