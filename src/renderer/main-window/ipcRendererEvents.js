@@ -2,6 +2,7 @@ import { ipcRenderer, remote } from 'electron'
 import { clearImages, loadImages, addImageEvents, selectFirstImage } from './images-ui'
 import { saveImage } from './filters'
 import path from 'path'
+import os from 'os'
 // este funciona en el lado del proceso de renderizado
 
 function setIpc () {
@@ -34,6 +35,9 @@ function openPreferences (){
     show: false
   })
 
+  if (os.platform() !== 'wind32') {
+    preferencesWindow.setParentWindow(mainWindow)
+  }
   preferencesWindow.setParentWindow(mainWindow)
   preferencesWindow.once('ready-to-show', () => {
     preferencesWindow.show()
