@@ -80,6 +80,10 @@ function clearImages () {
   }
 }
 
+function print () {
+  window.print()
+}
+
 function loadImages (images) {
   const imagesList = document.querySelector('ul.list-group')
 
@@ -102,5 +106,6 @@ module.exports = {
   selectEvent,
   searchImagesEvent,
   clearImages,
-  loadImages
+  loadImages,
+  print
 }
