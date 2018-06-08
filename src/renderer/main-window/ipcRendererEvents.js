@@ -1,4 +1,4 @@
-import { ipcRenderer, clipboard, remote } from 'electron'
+import { ipcRenderer, clipboard, remote, shell } from 'electron'
 import settings from 'electron-settings'
 import { clearImages, loadImages, addImageEvents, selectFirstImage } from './images-ui'
 import { saveImage } from './filters'
@@ -91,6 +91,7 @@ function uploadImage () {
   let fileName = path.basename(image)
 
   if (settings.has('cloudup.user') && settings.has('cloudup.passwd')) {
+    document.getElementById('overlay').classList.toggle('hidden')
     // El código de debajo no es utilizado ya que se accede a FTP anónimo
     // const decipher = crypto.createDecipher('aes192', 'Platzipics')
     // let decrypted = decipher.update(settings.get('cloudup.passwd'), 'hex', 'utf8')
@@ -100,11 +101,19 @@ function uploadImage () {
     client.on('ready', () => {
       console.log('Connected successfully and uploading image: ', fileName)
       client.put(image, fileName, (err) => {
+        document.getElementById('overlay').classList.toggle('hidden')
         if (err) {
           showDialog('error', 'Platzipics', `Error al cargar archivo al FTP ${err}`)
         } else {
           clipboard.writeText(`ftp://192.168.1.135//${fileName}`)
-          showDialog('info', 'Platzipics', `Imagen cargada con éxito, el enlace se copió al portapapeles`)          
+          const notify = new Notification('Platzipics', { // eslint-disable-line
+            body: `Imagen cargada con éxito, el enlace se copió al portapapeles. ` + 
+                  `De click para abrir la URL`,
+            silent: false
+          })
+          notify.onclick = () => {
+            shell.openExternal(`ftp://192.168.1.135//${fileName}`)
+          }
         }
         client.end()
       })
