@@ -13,6 +13,7 @@ window.addEventListener('load', () => {
     const decipher = crypto.createDecipher('aes192', 'Platzipics')
     let decrypted = decipher.update(settings.get('cloudup.passwd'), 'hex', 'utf8')
     decrypted += decipher.final('utf8')
+    
     document.getElementById('cloudup-passwd').value = decrypted
   }
 })
