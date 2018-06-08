@@ -10,7 +10,7 @@ if (process.env.NODE_ENV === 'development') {
   devtools()
 }
 
-let win
+global.win  //eslint-disable-line
 // console.dir(app)
 
 // imprimiendo un mensaje en la consola antes de salir
@@ -21,7 +21,7 @@ app.on('before-quit', () => {
 // Ejecutando órdenes cuando la aplicación está lista
 app.on('ready', () => {
   // creando una ventana
-  win = new BrowserWindow({
+  global.win = new BrowserWindow({
     width: 800,
     height: 600,
     title: 'Platzipics',
@@ -30,25 +30,25 @@ app.on('ready', () => {
     show: false
   })
 
-  setIpcMain(win)
-  handleErrors(win)
+  setIpcMain(global.win)
+  handleErrors(global.win)
 
-  win.once('ready-to-show', () => {
-    win.show()
+  global.win.once('ready-to-show', () => {
+    global.win.show()
   })
 
-  win.on('move', () => {
-    const position = win.getPosition()
+  global.win.on('move', () => {
+    const position = global.win.getPosition()
     console.log(`la posición es ${position}`)
   })
   // detectando el cierre de la ventana para cerrar el aplicativo
-  win.on('close', () => {
+  global.win.on('close', () => {
     // para que no quede en memoria el objeto que visualiza la ventana
-    win = null
+    global.win = null
     app.quit()
   })
 
-  // win.loadURL('http://devdocs.io/')
-  win.loadURL(`file://${__dirname}/renderer/index.html`)
-  win.toggleDevTools()
+  // global.win.loadURL('http://devdocs.io/')
+  global.win.loadURL(`file://${__dirname}/renderer/index.html`)
+  global.win.toggleDevTools()
 })
