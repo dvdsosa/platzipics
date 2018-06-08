@@ -17,6 +17,7 @@ function setIpc () {
     addImageEvents()
     selectFirstImage()
     settings.set('directory', dir)
+    document.getElementById('directory').innerHTML = dir
   })
 
   ipcRenderer.on('save-image', (event, file) => {
