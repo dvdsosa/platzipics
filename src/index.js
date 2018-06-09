@@ -1,7 +1,7 @@
 'use strict'
 
 // instanciando los objetos app y BrowserWindow
-import { app, BrowserWindow, Tray, globalShortcut } from 'electron'
+import { app, BrowserWindow, Tray, globalShortcut, protocol } from 'electron'
 import devtools from './devtools'
 import setIpcMain from './ipcMainEvents'
 import handleErrors from './handle-errors'
@@ -24,6 +24,15 @@ app.on('before-quit', () => {
 
 // Ejecutando órdenes cuando la aplicación está lista
 app.on('ready', () => {
+  protocol.registerFileProtocol('plp', (request, callback) => {
+    const url = request.url.substr(6) // porque es plp:// que son 6 caracteres
+    console.log("plp es:", url)
+    console.log("normalizado es: ", path.normalize(url))
+    callback({path: path.normalize(url)}) // eslint-disable-line
+  }, (err) => {
+    if (err) throw err
+  })
+
   // creando una ventana
   global.win = new BrowserWindow({
     width: 800,
