@@ -26,8 +26,6 @@ app.on('before-quit', () => {
 app.on('ready', () => {
   protocol.registerFileProtocol('plp', (request, callback) => {
     const url = request.url.substr(6) // porque es plp:// que son 6 caracteres
-    console.log("plp es:", url)
-    console.log("normalizado es: ", path.normalize(url))
     callback({path: path.normalize(url)}) // eslint-disable-line
   }, (err) => {
     if (err) throw err
@@ -40,7 +38,8 @@ app.on('ready', () => {
     title: 'Platzipics',
     center: true,
     maximizable: false,
-    show: false
+    show: false,
+    icon: path.join(__dirname, 'assets', 'icons', 'main-icon.png')
   })
 
   globalShortcut.register('CommandOrControl+Alt+p', () => {
@@ -80,5 +79,5 @@ app.on('ready', () => {
 
   // global.win.loadURL('http://devdocs.io/')
   global.win.loadURL(`file://${__dirname}/renderer/index.html`)
-  global.win.toggleDevTools()
+  //global.win.toggleDevTools()
 })

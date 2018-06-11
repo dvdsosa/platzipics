@@ -8,7 +8,9 @@
     "lint": "standard",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron-forge start",
-    "package": "electron-forge package",
+    "package-mac": "electron-forge package --platform=darwin --arch=x64",
+    "package-win": "electron-forge package --platform=win32 --arch=ia32",
+    "package-linux": "electron-forge package --platform=linux --arch=x64",
     "make": "electron-forge make"
   },
   "author": "dvdsosa@gmail.com",
@@ -48,7 +50,9 @@
         ]
       },
       "electronPackagerConfig": {
-        "packageManager": "npm"
+        "asar": true,
+        "packageManager": "npm",
+        "icon": "src/assets/icons/main-icon"
       },
       "electronWinstallerConfig": {
         "name": "platzipics"

@@ -45,10 +45,9 @@ function openPreferences (){
     show: false
   })
 
-  if (os.platform() !== 'wind32') {
+  if (os.platform() !== 'win32') {
     preferencesWindow.setParentWindow(mainWindow)
   }
-  preferencesWindow.setParentWindow(mainWindow)
   preferencesWindow.once('ready-to-show', () => {
     preferencesWindow.show()
     preferencesWindow.focus()
@@ -109,6 +108,7 @@ function uploadImage () {
           const notify = new Notification('Platzipics', { // eslint-disable-line
             body: `Imagen cargada con éxito, el enlace se copió al portapapeles. ` + 
                   `De click para abrir la URL`,
+            icon: "src/assets/icons/main-icon.png",
             silent: false
           })
           notify.onclick = () => {
@@ -148,8 +148,8 @@ function pasteImage(){
 }
 
 module.exports = {
-  setIpc: setIpc,
-  openDirectory: openDirectory,
+  setIpc,
+  openDirectory,
   saveFile,
   openPreferences,
   uploadImage,

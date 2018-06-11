@@ -1,4 +1,4 @@
-import fs from 'fs-extra'
+import fs from 'fs.extra'
 
 function applyFilter (filter, currentImage) {
   let imgObj = new Image()  // eslint-disable-line
